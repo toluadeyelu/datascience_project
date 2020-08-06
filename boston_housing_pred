@@ -1,0 +1,16 @@
+#Import needed libraries
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+sns.set_style('whitegrid')
+
+#Load the Boston Housing dataset from sklearn
+from sklearn.datasets import load_boston
+boston = load_boston()
+
+#Load as dataframe
+df = pd.DataFrame(boston.data)
+
