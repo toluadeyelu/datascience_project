@@ -14,3 +14,82 @@ boston = load_boston()
 #Load as dataframe
 df = pd.DataFrame(boston.data)
 
+#print(boston.DESCR)
+#boston_df = boston.data
+
+
+
+boston_pd = pd.DataFrame(boston.data)
+
+boston_pd.columns = boston.feature_names
+
+
+print (boston.DESCR)
+
+
+print (boston.feature_names)
+
+
+#targets is the median value of the owner occupied homes in $1000's
+boston_target = pd.DataFrame(boston.target)
+
+
+boston_target.describe()
+
+#Concatinate both dataframe to add the target to the other features
+boston_new = pd.concat([boston_pd, boston_target], axis=1)
+
+#Rename as appropriate
+boston_new.rename(columns={0:"Target"}, inplace=True)
+
+sns.pairplot(boston_new)
+
+sns.distplot(boston_new['Target'])
+
+sns.heatmap(boston_new.corr())
+
+boston_new.info()
+
+X = boston_new[['CRIM','ZN','INDUS','CHAS','CHAS','NOX','RM','AGE','DIS','RAD','TAX','PTRATIO','B','LSTAT']]
+y = boston_new['Target']
+
+
+# # Import and execute the linear reg model
+
+
+from sklearn.model_selection import train_test_split
+
+#split, test, train
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=101)
+
+
+from sklearn.linear_model import LinearRegression
+
+lm = LinearRegression()
+
+lm.fit(X_train,y_train)
+
+#print (lm.intercept_)
+coeff_df = pd.DataFrame(lm.coef_,X.columns,columns=['Coefficient'])
+coeff_df
+
+# Prediction from the Model 
+
+#predictions = lm.predict(X_test)
+
+#plt.scatter(y_test,predictions)
+
+#Residual plots
+sns.distplot((y_test-predictions),bins=50)
+
+
+from sklearn import metrics
+
+print('MAE:', metrics.mean_absolute_error(y_test, predictions))
+print('MSE:', metrics.mean_squared_error(y_test, predictions))
+print('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+
+
+
+
+
